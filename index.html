@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key and Door - Puzzle Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>🗝️ Key and Door 🚪</h1>
+            <div class="game-info">
+                <div class="level-info">
+                    <span>Level: <span id="current-level">1</span></span>
+                    <span>Timer: <span id="timer">5:00</span></span>
+                </div>
+                <div class="status">
+                    <span id="key-status">🗝️ Not Collected</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div id="game-grid" class="grid"></div>
+            
+            <div class="controls">
+                <div class="arrow-buttons">
+                    <button id="up-btn" class="arrow-btn">⬆️</button>
+                    <div class="horizontal-arrows">
+                        <button id="left-btn" class="arrow-btn">⬅️</button>
+                        <button id="down-btn" class="arrow-btn">⬇️</button>
+                        <button id="right-btn" class="arrow-btn">➡️</button>
+                    </div>
+                </div>
+                
+                <div class="game-controls">
+                    <button id="restart-btn" class="control-btn">🔄 Restart Level</button>
+                </div>
+            </div>
+        </main>
+
+        <div id="message-overlay" class="message-overlay hidden">
+            <div class="message-content">
+                <h2 id="message-title"></h2>
+                <p id="message-text"></p>
+                <button id="message-btn" class="control-btn">Continue</button>
+            </div>
+        </div>
+
+        <div id="instructions" class="instructions">
+            <h3>How to Play:</h3>
+            <ul>
+                <li>🧍 Move your character to collect the 🗝️ key first</li>
+                <li>Then reach the 🚪 door to complete the level</li>
+                <li>Avoid hidden walls - they'll reset your progress!</li>
+                <li>Complete each level within 5 minutes</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
