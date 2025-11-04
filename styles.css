@@ -438,3 +438,15 @@ header h1 {
     20% { opacity: 1; transform: translateX(-50%) translateY(-10px); }
     100% { opacity: 0; transform: translateX(-50%) translateY(-30px); }
 }
+
+/* Copyright Footer */
+.copyright {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
