@@ -15,7 +15,8 @@ class KeyAndDoorGame {
             visitedCells: new Set(),
             keyCollected: false,
             timeRemaining: this.timeLimit,
-            isGameOver: false
+            isGameOver: false,
+            wallsVisible: false
         };
         
         this.timerInterval = null;
@@ -43,6 +44,7 @@ class KeyAndDoorGame {
         
         // Control buttons
         this.restartBtn = document.getElementById('restart-btn');
+        this.viewWallsBtn = document.getElementById('view-walls-btn');
     }
     
     setupEventListeners() {
@@ -86,6 +88,7 @@ class KeyAndDoorGame {
         
         // Control buttons
         this.restartBtn.addEventListener('click', () => this.restartLevel());
+        this.viewWallsBtn.addEventListener('click', () => this.toggleWallVisibility());
         this.messageBtn.addEventListener('click', () => this.hideMessage());
     }
     
@@ -98,6 +101,12 @@ class KeyAndDoorGame {
         this.generateLevel(gridSize);
         this.resetTimer();
         this.startTimer();
+        
+        // Reset wall visibility
+        this.gameState.wallsVisible = false;
+        this.viewWallsBtn.textContent = '👁️ View Walls';
+        this.hideAllWalls();
+        
         this.updateDisplay();
         
         this.showMessage(
@@ -212,11 +221,8 @@ class KeyAndDoorGame {
     generateWallsSafely(size, start, key, door) {
         const walls = [];
         
-        // Higher wall density for more challenging gameplay
-        let wallDensity;
-        if (size === 5) wallDensity = 0.5; // Level 1: 50% walls
-        else if (size === 7) wallDensity = 0.7; // Level 2: 70% walls
-        else wallDensity = 0.85; // Level 3: 85% walls
+        // High wall density for maximum challenge on all levels
+        const wallDensity = 0.85; // All levels: 85% walls - ensuring at least one solution
         
         // Create essential paths first to protect them
         const essentialCells = this.getEssentialPathCells(size, start, key, door);
@@ -310,8 +316,8 @@ class KeyAndDoorGame {
         // but keeping it for backward compatibility
         const walls = [];
         
-        // Much lower wall density to ensure solvability
-        const wallDensity = 0.2;
+        // High wall density even for fallback, but ensure solvability
+        const wallDensity = 0.75;
         
         // Add horizontal walls
         for (let y = 0; y < size - 1; y++) {
@@ -681,6 +687,56 @@ class KeyAndDoorGame {
     restartLevel() {
         this.stopTimer();
         this.startLevel(this.currentLevel);
+    }
+    
+    toggleWallVisibility() {
+        if (this.gameState.isGameOver) return;
+        
+        this.gameState.wallsVisible = !this.gameState.wallsVisible;
+        
+        if (this.gameState.wallsVisible) {
+            this.viewWallsBtn.textContent = '🚫 Hide Walls';
+            this.showAllWalls();
+        } else {
+            this.viewWallsBtn.textContent = '👁️ View Walls';
+            this.hideAllWalls();
+        }
+    }
+    
+    showAllWalls() {
+        const gridSize = this.gridSizes[this.currentLevel];
+        
+        // Clear any existing wall classes first
+        this.hideAllWalls();
+        
+        // Show all walls in the current level
+        this.gameState.walls.forEach(wallKey => {
+            const [x1, y1, x2, y2] = wallKey.split(',').map(Number);
+            
+            // Determine which cells and which sides to show the wall on
+            if (x1 === x2) {
+                // Horizontal wall (between y1 and y2)
+                const topCell = this.getCellElement(x1, Math.min(y1, y2));
+                const bottomCell = this.getCellElement(x1, Math.max(y1, y2));
+                
+                if (topCell) topCell.classList.add('show-wall-bottom');
+                if (bottomCell) bottomCell.classList.add('show-wall-top');
+            } else {
+                // Vertical wall (between x1 and x2)
+                const leftCell = this.getCellElement(Math.min(x1, x2), y1);
+                const rightCell = this.getCellElement(Math.max(x1, x2), y1);
+                
+                if (leftCell) leftCell.classList.add('show-wall-right');
+                if (rightCell) rightCell.classList.add('show-wall-left');
+            }
+        });
+    }
+    
+    hideAllWalls() {
+        const cells = this.gridElement.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.classList.remove('show-wall-top', 'show-wall-right', 'show-wall-bottom', 'show-wall-left');
+        });
     }
     
     showMessage(title, text, buttonText = 'OK') {

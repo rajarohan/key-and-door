@@ -183,6 +183,51 @@ header h1 {
     50% { opacity: 0.3; }
 }
 
+/* Visible walls when "View Walls" is active */
+.cell.show-wall-top::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(220, 53, 69, 0.6);
+    z-index: 10;
+}
+
+.cell.show-wall-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px;
+    bottom: 0;
+    width: 4px;
+    background: rgba(220, 53, 69, 0.6);
+    z-index: 10;
+}
+
+.cell.show-wall-bottom::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(220, 53, 69, 0.6);
+    z-index: 10;
+}
+
+.cell.show-wall-left::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    bottom: 0;
+    width: 4px;
+    background: rgba(220, 53, 69, 0.6);
+    z-index: 10;
+}
+
 /* Controls */
 .controls {
     margin-top: 20px;
@@ -251,6 +296,14 @@ header h1 {
 .control-btn:hover {
     background: #5a6268;
     transform: translateY(-1px);
+}
+
+#view-walls-btn {
+    background: #28a745;
+}
+
+#view-walls-btn:hover {
+    background: #218838;
 }
 
 /* Message Overlay */
